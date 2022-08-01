@@ -29,6 +29,8 @@ class Git:
         self.tag = False
         self.reset_hard = False
         self.repo = None
+        if auth is None:
+            auth = {}
         if 'user' in auth:
             self.credentials = pygit2.credentials.UserPass(auth['user'],
                                                            auth['password'])
