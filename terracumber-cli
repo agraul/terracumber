@@ -14,6 +14,7 @@ import terracumber.cucumber
 import terracumber.junit
 import terracumber.mailer
 import terracumber.utils
+from terracumber import salt_tests
 
 
 def parse_args():
@@ -67,7 +68,7 @@ def parse_args():
                                              either environment variable BUILD_NUMBER from Jenkins
                                              or BUILD_TIMESTAMP variable (manually managed) must be
                                              exported""",
-                        choices=['gitsync', 'provision', 'cucumber', 'getresults', 'mail'], default=False)
+                        choices=['gitsync', 'provision', 'cucumber', 'getresults', 'mail', 'salt_tests'], default=False)
     parser.add_argument('--cucumber-cmd', help="""The full and arbitrary command to be run for
                                                   cucumber testing. Mandatory with
                                                   --runstep cucumber""",
@@ -377,6 +378,10 @@ def main():
         print("Preparing and sending email")
         results['mail'] = send_mail(
             args, config, template_data, results['cucumber'])
+
+    if args.runstep == 'salt_tests':
+        salt_tests.run_setup()
+        results['salt_tests'] = salt_tests.run_unit()
 
     for key, val in results.items():
         if val not in [None, True]:

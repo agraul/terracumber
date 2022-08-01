@@ -1,3 +1,4 @@
 pyhcl
 paramiko
 pygit2
+fabric
